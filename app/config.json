@@ -1,0 +1,7 @@
+{
+  "RESULT_TOPIC": "ocr_result_topic",
+  "RESULT_BUCKET": "ocr_demo_bucket_out",
+  "TRANSLATE_TOPIC": "ocr_translate_topic",
+  "TRANSLATE": true,
+  "TO_LANG": ["fr"]
+}
