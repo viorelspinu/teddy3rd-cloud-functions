@@ -1,22 +1,42 @@
 import time
+import json
+import base64
+import os
 
 from google.cloud import pubsub_v1
+from google.cloud import storage
 
-project_id = "ocr-demo-259005"
-subscription_name = "gcf-ocr-save-ocr_result_topic"
+storage_client = storage.Client()
+
+project_id = "teddy3rd-259507"
+subscription_name = "mp3-ready-subscriptions"
 
 subscriber = pubsub_v1.SubscriberClient()
 
-subscription_path = subscriber.subscription_path(    project_id, subscription_name)
+subscription_path = subscriber.subscription_path(project_id, subscription_name)
+
 
 def callback(message):
-    print('Received message: {}'.format(message))
+    payload = json.loads(message.data.decode('utf-8'))
+    print(payload)
+
+    mp3_file = payload['mp3_filename']
+    bucket_name = payload['bucket']
+    print(mp3_file)
+
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob(mp3_file)
+
+    destination_file_name = mp3_file
+    blob.download_to_filename(destination_file_name)
+
     message.ack()
 
-subscriber.subscribe(subscription_path, callback=callback)
+    os.system("afplay " + destination_file_name)
 
-# The subscriber is non-blocking. We must keep the main thread from
-# exiting to allow it to process messages asynchronously in the background.
+
+subscriber.subscribe(subscription_path, callback=callback)
 print('Listening for messages on {}'.format(subscription_path))
+
 while True:
     time.sleep(60)
