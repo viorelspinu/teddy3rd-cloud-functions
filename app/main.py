@@ -194,12 +194,15 @@ def retrieve_configuration(request):
     print(configuration_json)
     return configuration_json
 
+
 def update_configuration(request):
 
-    #TODO:get params from request and write to configuration json in Google Bucket Storage
+    # TODO:get params from request and write to configuration json in Google Bucket Storage
     return "OK"
 
 # [START message_validatation_helper]
+
+
 def validate_message(message, param):
     var = message.get(param)
     if not var:
