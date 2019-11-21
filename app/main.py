@@ -21,6 +21,7 @@ from google.cloud import storage
 from google.cloud import translate
 from google.cloud import vision
 from google.cloud import texttospeech
+from flask import send_file
 
 vision_client = vision.ImageAnnotatorClient()
 translate_client = translate.Client()
@@ -34,6 +35,8 @@ MP3_READY_TOPIC = "mp3-ready-topic"
 LABELS_TOPIC = "labels-topic"
 TRANSLATED_TEXT_TOPIC = "translated-text-topic"
 MP3_OUT_BUCKET = "teddy-bucket-out"
+CONFIGURATION_BUCKET = "teddy-settings"
+CONFIGURATION_FILE = "teddy-settings.json"
 TRANSLATE_TO_LANG = ["en", "fr"]
 
 
@@ -182,6 +185,19 @@ def text_to_speech(event, context):
     future.result()
     print("Published MP3 ready message to topic {}".format(topic_path))
 
+
+def retrieve_configuration(request):
+    bucket = storage_client.get_bucket(CONFIGURATION_BUCKET)
+    blob = bucket.blob(CONFIGURATION_FILE)
+
+    configuration_json = blob.download_as_string().decode("utf-8")
+    print(configuration_json)
+    return configuration_json
+
+def update_configuration(request):
+
+    #TODO:get params from request and write to configuration json in Google Bucket Storage
+    return "OK"
 
 # [START message_validatation_helper]
 def validate_message(message, param):
