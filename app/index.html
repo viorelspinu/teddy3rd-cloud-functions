@@ -1,0 +1,21 @@
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<html>
+<form action="__UPDATE_CONFIGURATION_FUNCTION_URL" method="POST">
+    <input type="checkbox" id="fr" name="fr" value="FR">Speak French<br>
+    <input type="checkbox" id="en" name="en" value="EN">Speak English<br>
+</form>
+
+<script>
+    $.get("https://us-central1-teddy3rd-259507.cloudfunctions.net/retrieve_configuration?" + (new Date()).getTime(), function (data) {        
+        data_json = JSON.parse(data);
+        console.log(data);
+        lang_array = data_json['translate_to_lang'];
+        $( "#fr" ).prop( "checked", lang_array.includes("fr") );
+        $( "#en" ).prop( "checked", lang_array.includes("en") );
+    });
+</script>
+
+</html>

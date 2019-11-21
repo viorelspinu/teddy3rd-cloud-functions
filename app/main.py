@@ -187,12 +187,27 @@ def text_to_speech(event, context):
 
 
 def retrieve_configuration(request):
+    if request.method == 'OPTIONS':
+        # Allows GET requests from any origin with the Content-Type
+        # header and caches preflight response for an 3600s
+        headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Max-Age': '3600'
+        }
+
+        return ('', 204, headers)
+
     bucket = storage_client.get_bucket(CONFIGURATION_BUCKET)
     blob = bucket.blob(CONFIGURATION_FILE)
 
     configuration_json = blob.download_as_string().decode("utf-8")
     print(configuration_json)
-    return configuration_json
+    headers = {
+        'Access-Control-Allow-Origin': '*'
+    }
+    return (configuration_json, 200, headers)
 
 
 def update_configuration(request):
