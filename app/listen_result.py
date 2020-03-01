@@ -8,7 +8,7 @@ from google.cloud import storage
 
 storage_client = storage.Client()
 
-project_id = "teddy3rd-259507"
+project_id = "teddy-serverless"
 subscription_name = "mp3-ready-subscriptions"
 
 subscriber = pubsub_v1.SubscriberClient()
